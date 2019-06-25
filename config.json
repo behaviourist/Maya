@@ -2,5 +2,11 @@
     "token": "NTkyNzgwMzQwMjg4ODE1MTE0.XRET6A.NLi0EMGFDQ2B-mhutfmA_B1qOfc",
     "api_keys": {
         "news_api_key": "a95394f7ad014a53b8e65c3b85cf99d8"
+    },
+    "colours": {
+        "FAIL": "#FF0000",
+        "SUCCESS": "#00FF00",
+        "WARNING": "#ff8c00",
+        "BLURPLE": "#7289da"
     }
 }

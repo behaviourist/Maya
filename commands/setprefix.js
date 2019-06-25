@@ -10,5 +10,5 @@ module.exports.run = async (client, message, args) => {
 module.exports.config = {
     name: "setprefix",
     aliases: [],
-    permLevel: 10
+    permLevel: 8
 }

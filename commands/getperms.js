@@ -1,7 +1,9 @@
 const Discord = require("discord.js");
 
+const { partialMatchUsername } = require("../utils");
+
 module.exports.run = async (client, message, args) => {
-    const member = message.mentions.members.first() || message.guild.members.get(args[0]) || message.member;
+    const member = message.mentions.members.first() || message.guild.members.get(args[0]) || partialMatchUsername(message, args.join(" ")) || message.member;
 
     const perms = [];
 

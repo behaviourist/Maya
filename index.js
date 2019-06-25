@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const Enmap = require("enmap")
 
 const fs = require("fs");
-
+// Test commit.
 const { token } = require("./config.json");
 
 client.commands = new Enmap();

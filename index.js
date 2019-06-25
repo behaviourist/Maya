@@ -10,6 +10,7 @@ client.commands = new Enmap();
 client.aliases = new Enmap();
 client.config = new Enmap({ name: "Config" });
 client.permLevels = new Enmap({ name: "PermLevels" });
+client.headsup = new Enmap({ name: "HeadsupConfig" });
 
 fs.readdir("./commands/", async (err, files) => {
     if (err) return console.error(err);

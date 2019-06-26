@@ -101,18 +101,28 @@ const langs = {
 }
 
 module.exports.run = async (client, message, args) => {
-    const lang = args[this.config.params[0].name];
+    let lang = args[this.config.params[0].name];
     const text = args[this.config.params[1].name];
+
+    if(langs[lang.toLowerCase()]) lang = lang.toLowerCase();
+    else {
+        let x = Object.keys(langs).find(y => langs[y].toLowerCase() === lang.toLowerCase());
+        if(x) {
+            lang = x;
+        } else {
+            return message.channel.send(`Invalid language`);
+        }
+    }
 
     message.channel.send("Detecting language...").then(msg => {
         request({
-            uri: `https://translate.yandex.net/api/v1.5/tr.json/detect?key=${api_keys.yandex_api_key}&text=${text}`,
+            uri: `https://translate.yandex.net/api/v1.5/tr.json/detect?key=${api_keys.yandex_api_key}&text=${encodeURI(text)}`,
             json: true
         }).then(language => {
             msg.edit(`Detected language... ${language.lang}`)
 
             request({
-                uri: `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${api_keys.yandex_api_key}&text=${text}&lang=${language.lang}-${lang.toLowerCase()}`,
+                uri: `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${api_keys.yandex_api_key}&text=${encodeURI(text)}&lang=${language.lang}-${encodeURI(lang)}&format=html`,
                 json: true
             }).then(data => {
                 msg.edit(data.text);

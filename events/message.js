@@ -1,4 +1,5 @@
 const Enmap = require("enmap");
+const utils = require("../utils");
 
 module.exports = (client, message) => {
     if (message.author.bot) return;
@@ -57,9 +58,9 @@ module.exports = (client, message) => {
                 }
             }
 
-            for (let j in retrievedCommand.config.params) {
+            for (let j in retrievedCommand.config.params) {perCase() + retrievedCommand
                 if (retrievedCommand.config.params[j].required && !args[j]) {
-                    return message.channel.send(`${retrievedCommand.config.params[j].name.substring(0, 1).toUpperCase() + retrievedCommand.config.params[j].name.substring(1)} is a required argument.`)
+                    return message.channel.send(`${utils.capitalize(retrievedCommand.config.params[j].name)} is a required argument.`);
                 } else {
                     argsObj[retrievedCommand.config.params[j].name] = args[j];
 

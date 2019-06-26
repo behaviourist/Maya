@@ -3,6 +3,6 @@ module.exports.partialMatchUsername = (message, username) => {
         .find(member => member.displayName.toLowerCase().includes(username.toLowerCase()));
 }
 
-module.exports.capitalize = (string) => {
-    return string.substring(0, 1).toUpperCase() + string.substring(1);
+module.exports.capitalize = string => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }

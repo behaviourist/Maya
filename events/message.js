@@ -58,7 +58,7 @@ module.exports = (client, message) => {
                 }
             }
 
-            for (let j in retrievedCommand.config.params) {perCase() + retrievedCommand
+            for (let j in retrievedCommand.config.params) {
                 if (retrievedCommand.config.params[j].required && !args[j]) {
                     return message.channel.send(`${utils.capitalize(retrievedCommand.config.params[j].name)} is a required argument.`);
                 } else {

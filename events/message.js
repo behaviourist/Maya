@@ -1,3 +1,5 @@
+const { RichEmbed } = require("discord.js");
+const { colours } = require("../config.json");
 const Enmap = require("enmap");
 const utils = require("../utils");
 
@@ -30,13 +32,12 @@ module.exports = (client, message) => {
     if (!command) return;
     if (!client.commands.has(command) && !client.aliases.has(command)) return;
 
-    if (message.content.match(prefixRegex)[0] === client.user
-        && message.mentions.users.length === 1
-        && message.mentions.users.length === 1
-        && message.content.split(" ")[0] === client.user) {
 
-        message.mentions.users.delete(client.user.id); message.mentions.members.delete(client.user.id);
+    if (message.content.split(" ")[0].match(`^(<@!?${client.user.id}>)`)) {
+        message.mentions.users.delete(client.user.id);
+        message.mentions.members.delete(client.user.id);
     }
+
 
     const retrievedCommand = client.commands.get(command) || client.commands.get(client.aliases.get(command));
 
@@ -60,7 +61,12 @@ module.exports = (client, message) => {
 
             for (let j in retrievedCommand.config.params) {
                 if (retrievedCommand.config.params[j].required && !args[j]) {
-                    return message.channel.send(`${utils.capitalize(retrievedCommand.config.params[j].name)} is a required argument.`);
+                    return message.channel.send(
+                        new RichEmbed()
+                            .setDescription(`${utils.capitalize(retrievedCommand.config.params[j].name)} is a required argument.`)
+                            .setColor(colours.FAIL)
+                            .setTimestamp()
+                    );
                 } else {
                     argsObj[retrievedCommand.config.params[j].name] = args[j];
 
@@ -68,7 +74,6 @@ module.exports = (client, message) => {
                         message.mentions.members
                             .map(member => argsObj[retrievedCommand.config.params[j].name] = member);
                     }
-
                 }
             }
         }

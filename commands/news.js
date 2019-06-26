@@ -2,7 +2,7 @@ const NewsAPI = require("newsapi");
 const { RichEmbed } = require("discord.js");
 
 const { api_keys } = require("../config.json");
-const api = new NewsAPI(api_keys.news_api_key);
+const api = new NewsAPI(api_keys.news);
 
 const { colours } = require("../config.json");
 

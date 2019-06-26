@@ -1,4 +1,5 @@
 const Enmap = require("enmap");
+const utils = require("../utils");
 
 module.exports = (client, message) => {
     if (message.author.bot) return;
@@ -23,14 +24,13 @@ module.exports = (client, message) => {
 
     if (!prefixRegex.test(message.content)) return;
 
-    const args = message.content.slice(message.content.match(prefixRegex)[0].length).trim().split(/ +/g);
+    let args = message.content.slice(message.content.match(prefixRegex)[0].length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
     if (!command) return;
     if (!client.commands.has(command) && !client.aliases.has(command)) return;
 
-    if (
-        message.content.match(prefixRegex)[0] === client.user
+    if (message.content.match(prefixRegex)[0] === client.user
         && message.mentions.users.length === 1
         && message.mentions.users.length === 1
         && message.content.split(" ")[0] === client.user) {
@@ -47,6 +47,34 @@ module.exports = (client, message) => {
         found !== null && retrievedCommand.config.permLevel <= i ? allow = true : null;
     }
 
-    if (retrievedCommand && allow) retrievedCommand.run(client, message, args);
+    if (retrievedCommand && allow) {
+        argsObj = {};
+        if (retrievedCommand.config.params.length > 0) {
+            for (let l in retrievedCommand.config.params) {
+                if (retrievedCommand.config.params[l].multiword) {
+                    if (typeof args[l] === "object") args[l] = args.slice(l);
+                    else args[l] = args.slice(l).join(" ");
+                    args = args.slice(0, l + 1);
+                }
+            }
+
+            for (let j in retrievedCommand.config.params) {perCase() + retrievedCommand
+                if (retrievedCommand.config.params[j].required && !args[j]) {
+                    return message.channel.send(`${utils.capitalize(retrievedCommand.config.params[j].name)} is a required argument.`);
+                } else {
+                    argsObj[retrievedCommand.config.params[j].name] = args[j];
+
+                    if (message.mentions.members) {
+                        message.mentions.members
+                            .map(member => argsObj[retrievedCommand.config.params[j].name] = member);
+                    }
+
+                }
+            }
+        }
+
+        retrievedCommand.run(client, message, argsObj);
+    }
+
     else return;
 }

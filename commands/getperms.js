@@ -1,7 +1,9 @@
-const Discord = require("discord.js");
+const { RichEmbed } = require("discord.js");
+const { partialMatchUsername } = require("../utils");
 
 module.exports.run = async (client, message, args) => {
-    const member = message.mentions.members.first() || message.guild.members.get(args[0]) || message.member;
+    let member = args[this.config.params[0].name] || message.member;
+    if (typeof member !== "object") member = partialMatchUsername(message, member);
 
     const perms = [];
 
@@ -12,15 +14,23 @@ module.exports.run = async (client, message, args) => {
     }
 
     return message.channel.send(
-        new Discord.RichEmbed()
+        new RichEmbed()
             .setColor("BLUE")
             .setTitle(`${member.user.tag}'s permissions`)
             .setDescription(perms.join("\n"))
+            .setTimestamp()
     );
 }
 
 module.exports.config = {
     name: "getperms",
     aliases: ["perms"],
-    permLevel: 0
+    permLevel: 0,
+    params: [
+        {
+            name: "member",
+            required: false,
+            multiword: false
+        }
+    ]
 }

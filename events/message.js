@@ -2,6 +2,7 @@ const { RichEmbed } = require("discord.js");
 const { colours } = require("../config.json");
 const Enmap = require("enmap");
 const utils = require("../utils");
+const NLU = require('../nlu.js');
 
 module.exports = (client, message) => {
     if (message.author.bot) return;
@@ -29,15 +30,28 @@ module.exports = (client, message) => {
     let args = message.content.slice(message.content.match(prefixRegex)[0].length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
-    if (!command) return;
-    if (!client.commands.has(command) && !client.aliases.has(command)) return;
-
-
     if (message.content.split(" ")[0].match(`^(<@!?${client.user.id}>)`)) {
         message.mentions.users.delete(client.user.id);
         message.mentions.members.delete(client.user.id);
+
+        
+        if (!client.commands.has(command) && !client.aliases.has(command)) {
+            NLU.manager.process(`${command} ${args.join(" ")}`).then(result => {
+                let intent = result.intent;
+
+                let retrievedCommand = client.nlucommands.get(intent);
+
+                if(!retrievedCommand) {
+                    return message.channel.send(`Sorry. I don't understand`);
+                }
+
+                retrievedCommand.run(client, message);
+            });
+        }
     }
 
+    if (!command) return;
+    if (!client.commands.has(command) && !client.aliases.has(command)) return;
 
     const retrievedCommand = client.commands.get(command) || client.commands.get(client.aliases.get(command));
 

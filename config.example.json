@@ -1,0 +1,15 @@
+{
+    "token": "",
+    "api_keys": {
+        "news": "",
+        "yandex": "",
+        "opencage_geo": "",
+        "weather": ""
+    },
+    "colours": {
+        "FAIL": "#FF0000",
+        "SUCCESS": "#00FF00",
+        "WARNING": "#ff8c00",
+        "BLURPLE": "#7289da"
+    }
+}

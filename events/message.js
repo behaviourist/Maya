@@ -3,6 +3,7 @@ const { colours } = require("../config.json");
 const Enmap = require("enmap");
 const utils = require("../utils");
 const NLU = require('../nlu.js');
+const config = require('../nlu_data/config.json');
 
 module.exports = (client, message) => {
     if (message.author.bot) return;
@@ -37,6 +38,10 @@ module.exports = (client, message) => {
         
         if (!client.commands.has(command) && !client.aliases.has(command)) {
             NLU.manager.process(`${command} ${args.join(" ")}`).then(result => {
+                if(result < config.threshold) {
+                    return message.channel.send(`Sorry. I don't understand`);
+                }
+
                 let intent = result.intent;
 
                 let retrievedCommand = client.nlucommands.get(intent);
@@ -87,6 +92,11 @@ module.exports = (client, message) => {
                     if (message.mentions.members) {
                         message.mentions.members
                             .map(member => argsObj[retrievedCommand.config.params[j].name] = member);
+                    }
+
+                    if(message.mentions.channels) {
+                        message.mentions.channels
+                            .map(channel => argsObj[retrievedCommand.config.params[j].name] = channel);
                     }
                 }
             }

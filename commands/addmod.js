@@ -4,7 +4,7 @@ const { colours } = require("../config.json");
 
 module.exports.run = async (client, message, args) => {
     let member = args[this.config.params[0].name];
-    console.log(member);
+    
     if (!member) {
         return message.channel.send(
             new RichEmbed()

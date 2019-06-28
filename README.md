@@ -71,3 +71,7 @@ This command allows users with the Discord permission "Administrator" to change 
 #### translate
 
 This command allows any use to translate text to another language. The command will auto detect the current language and translate it to a provided language.
+
+#### Heads up NLP
+
+By pinging Maya and asking for your heads up, or by asking how your day is looking, Maya will try to understand what you're asking and provide you with your heads up for the day based on your configurations. If you do not have any configurations, this will fail.

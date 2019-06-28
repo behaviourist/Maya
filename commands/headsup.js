@@ -35,7 +35,7 @@ module.exports.run = async (client, message, args) => {
 				const embed = new Discord.RichEmbed()
 					.setTitle(`Heads up settings`)
 					.setDescription(`
-					Weather Location: ${data.weather_address.name} (${data.weather_address.lat}, ${data.weather_address.long})
+					Weather Location: ${data.weather_address.name} (Lat: ${data.weather_address.lat} | Long: ${data.weather_address.long})
 					Temperature Units: ${data.weather_address.units},
 					News Category: ${data.news_preference.category},
 					News Country: ${data.news_preference.country},

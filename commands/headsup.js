@@ -18,11 +18,11 @@ module.exports.run = async (client, message, args) => {
 
 		message.channel.awaitMessages(
 			msg => msg.author === message.author,
-			{max: 1, time: 60000}
+			{ max: 1, time: 60000 }
 		).then(messages => {
 			let response = messages.first().content;
 
-			if(!(response.toLowerCase() === "view" || response.toLowerCase() === "update")) {
+			if (!(response.toLowerCase() === "view" || response.toLowerCase() === "update")) {
 				const embed = new Discord.RichEmbed()
 					.setTitle(`Invalid response.`)
 					.setDescription(`Please choose one of the responses provided in the previous step. Cancelled prompt.`)
@@ -30,7 +30,7 @@ module.exports.run = async (client, message, args) => {
 				return message.channel.send(embed);
 			}
 
-			if(response.toLowerCase() === "view") {
+			if (response.toLowerCase() === "view") {
 				const data = client.headsup.get(message.author.id);
 				const embed = new Discord.RichEmbed()
 					.setTitle(`Heads up settings`)
@@ -43,33 +43,33 @@ module.exports.run = async (client, message, args) => {
 					`)
 					.setColor(colours.BLURPLE);
 				return message.channel.send(embed);
-			} else if(response.toLowerCase() === "update") {
+			} else if (response.toLowerCase() === "update") {
 				settings(false);
 			}
 		});
 	} else settings(true);
 
 	function settings(existing) {
-	
+
 		const embed = new Discord.RichEmbed()
 			.setDescription(`First, please provide the area that you wish to receive weather data about.
 			\nThis can be a city, country, postcode/zipcode or an exact address.
 			\nThe data that you provide will be stored in order to get your weather data when you request it.`)
 			.setColor(colours.BLURPLE);
-		if(existing) embed.setTitle(`It looks like you don't have any heads up configurations. Let's help you get them set up.`)
+		if (existing) embed.setTitle(`It looks like you don't have any heads up configurations. Let's help you get them set up.`)
 		message.channel.send(embed);
 
 		message.channel.awaitMessages(
 			msg => msg.author === message.author,
-			{max: 1, time: 60000}
+			{ max: 1, time: 60000 }
 		).then(messages => {
 			let addr = messages.first().content;
 
 			message.channel.send(`Searching address...`).then(searchingAddrMsg => {
 				request({
 					uri: `https://api.opencagedata.com/geocode/v1/json?q=${encodeURI(addr)}&key=${api_keys.opencage_geo}&pretty=1&limit=1&no_annotations=1`
-				}, function(err, response, body) {
-					if(err) {
+				}, function (err, response, body) {
+					if (err) {
 						const embed = new Discord.RichEmbed()
 							.setTitle(`An unknown error occured.`)
 							.setDescription(`Please try again later...`)
@@ -77,13 +77,13 @@ module.exports.run = async (client, message, args) => {
 						return message.channel.send(embed);
 					}
 
-					if(response.statusCode !== 200) {
+					if (response.statusCode !== 200) {
 						const embed = new Discord.RichEmbed()
 							.setTitle(`An error occured.`)
 							.setDescription(`Please try again later...`)
 							.setColor(colours.FAIL);
 						return message.channel.send(embed);
-						
+
 					}
 
 					let geoData = JSON.parse(body);
@@ -93,22 +93,22 @@ module.exports.run = async (client, message, args) => {
 						lat: location.geometry.lat,
 						long: location.geometry.lng
 					}
-					
+
 					const embed = new Discord.RichEmbed()
 						.setTitle(`Successfully found address!`)
 						.setDescription(`We have found the geo coordinates for the closest match of the address provided.
 						\nNext, what unit would you like your temperature in?
-						\nValid responses: ${tempUnits.map(unit => {return `\`${unit}\``})}`)
+						\nValid responses: ${tempUnits.map(unit => { return `\`${unit}\`` })}`)
 						.setColor(colours.SUCCESS);
 					searchingAddrMsg.edit(embed);
 
 					message.channel.awaitMessages(
 						msg => msg.author === message.author,
-						{max: 1, time: 60000}
+						{ max: 1, time: 60000 }
 					).then(messages => {
 						const tempUnit = messages.first().content;
 
-						if(!tempUnits.includes(tempUnit.toLowerCase())) {
+						if (!tempUnits.includes(tempUnit.toLowerCase())) {
 							const embed = new Discord.RichEmbed()
 								.setTitle(`Invalid temperature unit.`)
 								.setDescription(`Please choose one of the temperature units provided in the previous step. Cancelled prompt.`)
@@ -121,16 +121,16 @@ module.exports.run = async (client, message, args) => {
 						const embed = new Discord.RichEmbed()
 							.setTitle(`Successfully found temperature!`)
 							.setDescription(`Next, what type of news would you like to hear about?
-							\nValid responses: ${newsCategories.map(cat => {return `\`${cat}\``})}`)
+							\nValid responses: ${newsCategories.map(cat => { return `\`${cat}\`` })}`)
 							.setColor(colours.SUCCESS);
 						message.channel.send(embed);
 						message.channel.awaitMessages(
 							msg => msg.author === message.author,
-							{max: 1, time: 60000}
+							{ max: 1, time: 60000 }
 						).then(messages => {
 							let newsCategory = messages.first().content;
 
-							if(!newsCategories.includes(newsCategory.toLowerCase())) {
+							if (!newsCategories.includes(newsCategory.toLowerCase())) {
 								const embed = new Discord.RichEmbed()
 									.setTitle(`Invalid news category.`)
 									.setDescription(`Please choose one of the categories provided in the previous step. Cancelled prompt.`)
@@ -142,12 +142,12 @@ module.exports.run = async (client, message, args) => {
 								.setTitle(`Successfully found news category!`)
 								.setDescription(`Next, which region do you want to hear news about?
 								\nYou can find a list of 2-letter ISO 3166-1 country codes [here](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes)
-								\nValid responses: ${newsCountries.map(country => {return `\`${country}\``})}`)
+								\nValid responses: ${newsCountries.map(country => { return `\`${country}\`` })}`)
 								.setColor(colours.SUCCESS);
 							message.channel.send(embed);
 							message.channel.awaitMessages(
 								msg => msg.author === message.author,
-								{max: 1, time: 60000}
+								{ max: 1, time: 60000 }
 							).then(messages => {
 								let newsCountry = messages.first().content;
 								let newsData = {
@@ -155,7 +155,7 @@ module.exports.run = async (client, message, args) => {
 									country: newsCountry.toLowerCase()
 								}
 
-								if(!newsCountries.includes(newsCountry.toLowerCase())) {
+								if (!newsCountries.includes(newsCountry.toLowerCase())) {
 									const embed = new Discord.RichEmbed()
 										.setTitle(`Invalid news country.`)
 										.setDescription(`Please choose one of the countries provided in the previous step. Cancelled prompt.`)
@@ -172,11 +172,11 @@ module.exports.run = async (client, message, args) => {
 								message.channel.send(embed);
 								message.channel.awaitMessages(
 									msg => msg.author === message.author,
-									{max: 1, time: 60000}
+									{ max: 1, time: 60000 }
 								).then(messages => {
 									let reminders = messages.first().content;
 
-									if(!(reminders.toLowerCase() === "yes" || reminders.toLowerCase() === "no")) {
+									if (!(reminders.toLowerCase() === "yes" || reminders.toLowerCase() === "no")) {
 										const embed = new Discord.RichEmbed()
 											.setTitle(`Invalid response.`)
 											.setDescription(`Please choose yes or no. Cancelled prompt.`)

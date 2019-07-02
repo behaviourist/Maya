@@ -9,7 +9,7 @@ module.exports = (client, message) => {
     if (message.author.bot) return;
 
     const permLevels = client.permLevels.ensure(message.guild.id, {
-        0: { data: { name: "Default", description: "Default Users" }, users: [] },
+        0: { data: { name: "Default", description: "Default Users" }, users: [message.author.id] },
         1: { data: { name: "", description: "" }, users: [] },
         2: { data: { name: "", description: "" }, users: [] },
         3: { data: { name: "", description: "" }, users: [] },
@@ -35,10 +35,9 @@ module.exports = (client, message) => {
         message.mentions.users.delete(client.user.id);
         message.mentions.members.delete(client.user.id);
 
-        
         if (!client.commands.has(command) && !client.aliases.has(command)) {
             NLU.manager.process(`${command} ${args.join(" ")}`).then(result => {
-                if(result < config.threshold) {
+                if (result < config.threshold) {
                     return message.channel.send(`Sorry. I don't understand`);
                 }
 
@@ -46,7 +45,7 @@ module.exports = (client, message) => {
 
                 let retrievedCommand = client.nlucommands.get(intent);
 
-                if(!retrievedCommand) {
+                if (!retrievedCommand) {
                     return message.channel.send(`Sorry. I don't understand`);
                 }
 
@@ -94,7 +93,7 @@ module.exports = (client, message) => {
                             .map(member => argsObj[retrievedCommand.config.params[j].name] = member);
                     }
 
-                    if(message.mentions.channels) {
+                    if (message.mentions.channels) {
                         message.mentions.channels
                             .map(channel => argsObj[retrievedCommand.config.params[j].name] = channel);
                     }

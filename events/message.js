@@ -19,7 +19,7 @@ module.exports = (client, message) => {
         7: { data: { name: "Moderator", description: "A member specified by the server owner." }, users: [] },
         8: { data: { name: "Administrator", description: "A member with the 'ADMINISTRATOR' permission." }, users: [] },
         9: { data: { name: "Server Owner", description: "Owner of the Discord server." }, users: [message.guild.ownerID] },
-        10: { data: { name: "Developer", description: "Maya Developers." }, users: ["169516316124905473", "276911608565989378", "204095557642354689", "347765999996502017"] }
+        10: { data: { name: "Developer", description: "Maya Developers." }, users: ["169516316124905473", "204095557642354689"] }
     });
 
     const config = client.config.ensure(message.guild.id, { prefix: "-" });
